@@ -21,10 +21,10 @@ public class OrderedProduct {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "price")
+    @Column(name = "PRICE")
     private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)

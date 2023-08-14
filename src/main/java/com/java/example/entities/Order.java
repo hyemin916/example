@@ -11,8 +11,8 @@ import jakarta.persistence.Table;
 
 import java.util.List;
 
-@Entity
 @Table(name = "ORDERS")
+@Entity
 public class Order {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
