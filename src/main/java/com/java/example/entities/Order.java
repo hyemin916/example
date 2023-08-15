@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import java.util.List;
@@ -25,4 +26,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderedProduct> orderedProducts;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Shipping shipping;
 }

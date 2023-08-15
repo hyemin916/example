@@ -9,3 +9,8 @@ values (1, 'product 1', 1000, 1),
        (3, 'product 3', 1500, 2),
        (4, 'product 4', 2000, 3),
        (5, 'product 1', 1000, 3);
+
+insert into SHIPPINGS (ID, ADDRESS, ORDER_ID)
+values (1, 'address 1', 1),
+       (2, 'address 2', 2),
+       (3, 'address 3', 3)
