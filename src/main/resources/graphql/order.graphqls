@@ -1,0 +1,21 @@
+extend type Query {
+    getOrders(userId: ID!): OrderSlice!
+}
+
+type OrderSlice {
+    content: [OrderDto]!
+}
+
+type OrderDto {
+    id: ID!
+    products: [ProductDto]
+    shipping: ShippingDto
+}
+
+type ProductDto {
+    name: String
+}
+
+type ShippingDto {
+    id: ID
+}
