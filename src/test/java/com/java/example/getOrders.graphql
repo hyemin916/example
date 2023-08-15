@@ -1,0 +1,7 @@
+query getOrders($userId: ID!) {
+    getOrders(userId: $userId) {
+        content {
+            id
+        }
+    }
+}

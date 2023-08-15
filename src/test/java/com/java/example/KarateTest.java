@@ -18,6 +18,6 @@ class KarateTest {
 
     @Karate.Test
     Karate test() {
-        return Karate.run("classpath:com/java/example/demo.feature");
+        return Karate.run("classpath:com/java/example/order.feature");
     }
 }
