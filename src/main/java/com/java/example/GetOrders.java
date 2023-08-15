@@ -32,16 +32,24 @@ public class GetOrders {
 
     @BatchMapping Map<OrderDto, ShippingDto> shipping(List<OrderDto> orders) {
         final List<Long> orderIds = orderIdsWith(orders);
-        final Map<Object, ShippingDto> shippingsByOrderId= orderDao.listShippings(orderIds)
-                .stream()
-                .collect(Collectors.toUnmodifiableMap(
-                        ShippingDto::orderId,
-                        Function.identity()
-                ));
+        final Map<Object, ShippingDto> shippingsByOrderId= getShippingsByOrderId(orderIds);
+        return pairOrdersWithShippings(orders, shippingsByOrderId);
+    }
+
+    private Map<OrderDto, ShippingDto> pairOrdersWithShippings(final List<OrderDto> orders, final Map<Object, ShippingDto> shippingsByOrderId) {
         return orders.stream()
                 .collect(Collectors.toUnmodifiableMap(
                         Function.identity(),
                         order -> shippingsByOrderId.getOrDefault(order.id(), new ShippingDto(null, null))
+                ));
+    }
+
+    private Map<Object, ShippingDto> getShippingsByOrderId(final List<Long> orderIds) {
+        return orderDao.listShippings(orderIds)
+                .stream()
+                .collect(Collectors.toUnmodifiableMap(
+                        ShippingDto::orderId,
+                        Function.identity()
                 ));
     }
 
