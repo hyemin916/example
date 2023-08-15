@@ -24,4 +24,12 @@ interface OrderDao extends CrudRepository<Order, Long> {
         where order.id in :orderIds
     """)
     List<OrderedProductDto> listOrderedProducts(List<Long> orderIds);
+
+    @Query("""
+            select new com.java.example.ShippingDto(id, order.id)
+            from Shipping 
+            where order.id in :orderIds
+            """
+    )
+    List<ShippingDto> listShippings(List<Long> orderIds);
 }

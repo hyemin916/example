@@ -1,5 +1,6 @@
 package com.java.example;
 
+import com.java.example.entities.Shipping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -27,6 +28,21 @@ public class GetOrders {
         final List<Long> orderIds = orderIdsWith(orders);
         final Map<Long, List<OrderedProductDto>> productsByOrderId = getProductsByOrderId(orderIds);
         return pairOrdersWithProducts(orders, productsByOrderId);
+    }
+
+    @BatchMapping Map<OrderDto, ShippingDto> shipping(List<OrderDto> orders) {
+        final List<Long> orderIds = orderIdsWith(orders);
+        final Map<Object, ShippingDto> shippingsByOrderId= orderDao.listShippings(orderIds)
+                .stream()
+                .collect(Collectors.toUnmodifiableMap(
+                        ShippingDto::orderId,
+                        Function.identity()
+                ));
+        return orders.stream()
+                .collect(Collectors.toUnmodifiableMap(
+                        Function.identity(),
+                        order -> shippingsByOrderId.getOrDefault(order.id(), new ShippingDto(null, null))
+                ));
     }
 
     private Map<OrderDto, List<OrderedProductDto>> pairOrdersWithProducts(final List<OrderDto> orders, final Map<Long, List<OrderedProductDto>> productsByOrderId) {
