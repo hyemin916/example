@@ -1,4 +1,5 @@
 Feature: getOrders
+
   Background:
     * configure report = true
     * def variables =
@@ -8,7 +9,11 @@ Feature: getOrders
     }
     """
 
-  Scenario: getOrders
+  Scenario: get orders
     * def result = call read('call_graphql_with_query.feature') { queryName: 'getOrders', variables: #(variables) }
     * print result
-    And match result..content contains deep [{ id: #present }]
+    * match result..content contains deep [{ id: #present }]
+
+  Scenario: get orders with products
+    * def result = call read('call_graphql_with_query.feature') { queryName: 'getOrders', variables: #(variables) }
+    * match result..products contains deep [{ name: #string }]
