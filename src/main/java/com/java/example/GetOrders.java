@@ -24,15 +24,29 @@ public class GetOrders {
 
     @BatchMapping
     public Map<OrderDto, List<OrderedProductDto>> products(List<OrderDto> orders) {
-        final List<Long> orderIds = orders.stream()
-                .map(OrderDto::id)
-                .toList();
-        final List<OrderedProductDto> products = orderDao.listOrderedProducts(orderIds);
-        final Map<Long, List<OrderedProductDto>> productsByOrderId = products.stream().collect(Collectors.groupingBy(OrderedProductDto::orderId));
+        final List<Long> orderIds = orderIdsWith(orders);
+        final Map<Long, List<OrderedProductDto>> productsByOrderId = getProductsByOrderId(orderIds);
+        return pairOrdersWithProducts(orders, productsByOrderId);
+    }
+
+    private Map<OrderDto, List<OrderedProductDto>> pairOrdersWithProducts(final List<OrderDto> orders, final Map<Long, List<OrderedProductDto>> productsByOrderId) {
         return orders.stream()
                 .collect(Collectors.toUnmodifiableMap(
                         Function.identity(),
                         order -> productsByOrderId.getOrDefault(order.id(), List.of())
                 ));
+    }
+
+    private Map<Long, List<OrderedProductDto>> getProductsByOrderId(final List<Long> orderIds) {
+        final Map<Long, List<OrderedProductDto>> productsByOrderId = orderDao.listOrderedProducts(orderIds)
+                .stream()
+                .collect(Collectors.groupingBy(OrderedProductDto::orderId));
+        return productsByOrderId;
+    }
+
+    private List<Long> orderIdsWith(final List<OrderDto> orders) {
+        return orders.stream()
+                .map(OrderDto::id)
+                .toList();
     }
 }
