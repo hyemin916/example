@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 interface OrderDao extends CrudRepository<Order, Long> {
 
@@ -15,4 +17,11 @@ interface OrderDao extends CrudRepository<Order, Long> {
                 where userId = :userId
             """)
     Slice<OrderDto> list(final Long userId);
+
+    @Query("""
+        select new com.java.example.OrderedProductDto(name, order.id)
+        from OrderedProduct
+        where order.id in :orderIds
+    """)
+    List<OrderedProductDto> listOrderedProducts(List<Long> orderIds);
 }
