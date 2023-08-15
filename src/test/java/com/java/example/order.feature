@@ -17,3 +17,7 @@ Feature: getOrders
   Scenario: get orders with products
     * def result = call read('call_graphql_with_query.feature') { queryName: 'getOrders', variables: #(variables) }
     * match result..products contains deep [{ name: #string }]
+
+  Scenario: get orders with shipping
+    * def result = call read('call_graphql_with_query.feature') { queryName: 'getOrders', variables: #(variables) }
+    * match result..content contains deep [{ shipping: { id: #present } }]

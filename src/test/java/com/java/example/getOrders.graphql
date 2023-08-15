@@ -5,6 +5,9 @@ query getOrders($userId: ID!) {
             products {
                 name
             }
+            shipping {
+                id
+            }
         }
     }
 }
